@@ -1,0 +1,40 @@
+h1 {
+ font-family: 'Abril Fatface', cursive;
+  position:absolute;
+  left:7px;
+  top:200px;
+  font-size:40px;  
+}
+#header1 {
+   font-family: 'Abril Fatface', cursive;
+  position:absolute;
+  left:7px;
+  top:150px;
+  font-size:30px
+  
+}
+
+
+h3 {
+  font-family: 'Abril Fatface', cursive;
+}
+cite {
+  font-family: 'Abril Fatface', cursive;
+  background:#2B2B2B;
+  padding:2%;
+  font-size:35px;
+  color:white
+  
+}
+p {
+  font-family: 'Josefin Sans', sans-serif;
+}
+cite {
+top-margin:20px;
+}
+.content {
+  top-margin:10px;
+}
+img {
+ max-width:900px
+}
