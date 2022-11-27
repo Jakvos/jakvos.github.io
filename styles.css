@@ -1,17 +1,11 @@
-<<<<<<<< HEAD:styles.css
-.test {
-    color:"blue"
-    background-color:"white";
+.Uvod {
+    background-image: url(https://raw.githubusercontent.com/Jakvos/jakvos.github.io/main/eshop%20baner.png?token=GHSAT0AAAAAAB3VZSIM4UMM7CLCISZ34MTQY4DQFHQ);
     text-align: center;
-    font-family: 'Raleway', sans-serif;
+    text-decoration: overline;
 }
-#uwucats {
-    text-align: center;
-    font-family: 'Raleway', sans-serif;
-    color:"blue"
+.link {
+    color: aquamarine;
+    background-color: beige;
+    background-size: 5%;
+    padding: 5px;
 }
-p {
-    font-family: 'Raleway', sans-serif;  
-}
-========
->>>>>>>> bdc14663ff4d896a930a525ed426824279c06cd9:styly.css
