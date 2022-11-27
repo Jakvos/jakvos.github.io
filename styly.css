@@ -1,0 +1,14 @@
+#test {
+    color:"blue"
+    background-color:"white";
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+}
+#uwucats {
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    color:"blue"
+}
+p {
+    font-family: 'Raleway', sans-serif;  
+}
