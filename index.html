@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Halloweenský kvíz BZDM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="script" href="script.js">
+</head>
+<body>
+    <button onclick="zobrazStracháka()">Začít Halloweenský kvíz</button>
+    <img id="strachak" src="haloween.png" alt="Strasidlo">
+    <audio id="strasidelnyZvuk" src="demonic-woman-scream-6333.mp3"></audio>
+
+    <script>
+        function zobrazStracháka() {
+            document.getElementById("strachak").style.display = "block";
+            document.getElementById("strasidelnyZvuk").play();
+        }
+    </script>
+</body>
+</html>
