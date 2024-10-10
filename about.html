@@ -17,6 +17,10 @@
             // Play the audio file
             document.getElementById("strasidelnyZvuk").play();
         }
+
+        document.getElementById("strasidelnyZvuk").addEventListener("error", function(error) {
+  console.error("Error playing audio:", error);
+});
     </script>
 </body>
 </html>
