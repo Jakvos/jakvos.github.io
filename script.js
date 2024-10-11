@@ -8,7 +8,7 @@ function zobrazStracháka() {
 
 
 function zobrazStracháka() {
-    const obrazky = ["strasidlo1.jpg", "strasidlo2.jpg", "strasidlo3.jpg"];
+    const obrazky = ["haloween.png", "stock-photo-creepy-bloody-doll-in-the-dark-1338834074.jpg.jpg", "stock-photo-creepy-bloody-doll-in-the-dark-1338834074(1).jpg"];
     const nahodnyIndex = Math.floor(Math.random() * obrazky.length);
     document.getElementById("strachak").src = obrazky[nahodnyIndex];
     document.getElementById("strachak").style.display = "block";
