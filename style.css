@@ -31,7 +31,7 @@ button {
 
   body {background-color: black;} 
 
-  .tlacitko {
+  #tlacitko {
     margin: 50px;
     padding: 50px;
     align-content: center;
