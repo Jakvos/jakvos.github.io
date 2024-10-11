@@ -5,14 +5,15 @@
     <link rel="stylesheet" href="style.css">    
 </head>
 <body>
+
     <div class="container">
     <div class="center">
-    <button onclick="zobrazStracháka()">Začít Halloweenský kvíz</button>
+        <div id="hideaway" style="display:none;">Here's the hidden content</div>
+        <a href="javascript:;" onClick="document.getElementById('hideaway').style.display='block';">Reveal hidden content</a>
+    <button onClick="document.getElementById('hideaway').style.display = 'block';" >Začít Halloweenský kvíz</button>
     </div>
     </div>
-    <img id="strachak" src="haloween.png" alt="Strasidlo" style="display: none;">
-    <audio id="strasidelnyZvuk" src="demonic-woman-scream-6333.mp3"></audio>
-
-    <script src="script.js"></script>
+    
+    <script src="script.j"></script>
 </body>
 </html>
