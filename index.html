@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Halloweenský kvíz BZDM</title>
-    <link rel="stylesheet" href="style.css">    
+  <title>Halloweenský kvíz BZDM</title>
 </head>
 <body>
+  <form>
+    <label for="name">Otázka 1:</label>
+    <input type="text" id="name" name="name"><br><br>
 
-    <div class="container">
-    <div class="center">
-        <div id="hideaway" style="display:none;">Here's the hidden content</div>
-    <button onClick="document.getElementById('hideaway').style.display = 'block';" >Začít Halloweenský kvíz</button>
-    </div>
-    </div>
-    
-    <script src="script.j"></script>
+    <label for="email">Otázka 2:</label>
+    <input type="email" id="email" name="email"><br><br>
+
+    <input type="submit" value="Submit">
+  </form>
 </body>
 </html>
