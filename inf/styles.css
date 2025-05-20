@@ -1,72 +1,86 @@
 body {
-    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #096B68; /* Tmavé pozadí jako u hry */
+    color: #FFFBDE; /* Světlý text */
+    font-family: 'Noto Sans', sans-serif;
     text-align: center;
-    margin-top: 50px;
 }
 
-#game-container {
-    display: inline-block;
-    padding: 20px;
-    border: 2px solid #333;
+#game-container, #welcome-container {
+    background-color: #F79B72; /* Tmavší pozadí pro kontejner */
+    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #096B68;
-    width: 300px;
-    height: 350px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 90%;
+    margin: 20px;
 }
 
-input {
-    padding: 10px;
-    font-size: 18px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: #2A4759;
-    background-color: #90D1CA;
+h1.poetsen-one-regular {
+    font-family: 'Poetsen One', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #FFD700; /* Zlatá barva pro nadpis, jako u hry */
+    margin-bottom: 20px;
+}
+
+p.noto-sans-100 {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 100;
+    font-style: normal;
+    color: #FFFBDE; /* Světlý text pro popis */
+    margin-bottom: 25px;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #129990;
+    background-color: #537D5D; /* Modrá barva tlačítka, můžete přizpůsobit */
     color: white;
+    padding: 12px 25px;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
-    border-radius: 10px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    margin: 10px; /* Mezera mezi tlačítky */
+    font-family: 'Noto Sans', sans-serif; /* Font pro tlačítka */
+    font-weight: 400; /* Můžete upravit váhu fontu */
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0056b3; /* Tmavší modrá při najetí myší */
+}
+
+/* Styly pro input a feedback z vaší hry, které se aplikují i zde, pokud je to potřeba */
+input[type="number"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #444;
+    color: #DDDDDD;
+    width: calc(100% - 22px); /* Zohlednění paddingu a borderu */
+    font-size: 1.1em;
+    text-align: center;
 }
 
 #feedback {
     margin-top: 20px;
-    font-size: 18px;
     font-weight: bold;
+    min-height: 20px; /* Zajistí, že se div nebude "smrskávat" */
 }
 
-#reset-btn {
-    background-color: #f44336;
+/* Ujistěte se, že toto je v styles.css */
+.noto-sans-100 {
+    font-family: "Noto Sans", sans-serif;
+    font-weight: 100;
+    font-style: normal;
 }
-
-#reset-btn:hover {
-    background-color: #e53935;
-}
-
 .poetsen-one-regular {
   font-family: "Poetsen One", sans-serif;
   font-weight: 400;
   font-style: normal;
-  color: #FFFBDE;
-}
-
-
-.noto-sans-100 {
-  font-family: "Noto Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
-  color: #FFFBDE;
 }
