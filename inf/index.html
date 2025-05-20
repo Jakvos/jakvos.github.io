@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hádání čísla</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+</style>
+
+</head>
+<body>
+    <div id="game-container">
+        <h1 class="poetsen-one-regular">Uhádni číslo!</h1>
+        <p class="noto-sans-100">Uhádni číslo mezi 1 a 1000.</p>
+        <input type="number" id="user-guess" placeholder="Vlož svůj tip sem." />
+        <button id="guess-btn">Hádej!</button>
+        <div id="feedback"></div>
+        <button id="reset-btn" style="display: none;">Zkusit znovu?</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
