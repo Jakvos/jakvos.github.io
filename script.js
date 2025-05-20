@@ -17,12 +17,12 @@ document.addEventListener('keydown', function(event) {
         // Toggle Admin Mode when Ctrl + Alt is pressed
         if (!isAdminMode) {
             isAdminMode = true;
-            alert("Admin Mode Activated!"); // Alert to notify the user
+            alert("Debug Mód aktivován. Pro vypnutí stiskněte CTRL + ALT."); // Alert to notify the user
             feedbackDiv.innerHTML = `<strong>Admin Mode is Active!</strong><br>The secret number is: ${randomNumber}`; // Show the random number
             feedbackDiv.style.color = "purple"; // Change feedback color for Admin Mode
         } else {
             isAdminMode = false;
-            alert("Admin Mode Deactivated!"); // Alert to notify the user
+            alert("Debug mód deaktivován!"); // Alert to notify the user
             feedbackDiv.innerHTML = ""; // Clear feedback when Admin Mode is turned off
         }
     }
@@ -40,16 +40,16 @@ function handleGuess() {
 
     // Validate the guess is within the range of 1-1000
     if (isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
-        feedbackDiv.textContent = "Please enter a valid number between 1 and 1000!";
+        feedbackDiv.textContent = "Prosím vložte platné číslo od 1 do 1000!";
         feedbackDiv.style.color = "red";
     } else if (userGuess > randomNumber) {
-        feedbackDiv.textContent = "Too high! Try again.";
+        feedbackDiv.textContent = "Číslo je moc velké! Zkuste to znovu.";
         feedbackDiv.style.color = "orange";
     } else if (userGuess < randomNumber) {
-        feedbackDiv.textContent = "Too low! Try again.";
+        feedbackDiv.textContent = "Číslo je moc malé! Zkuste to znovu.";
         feedbackDiv.style.color = "orange";
     } else {
-        feedbackDiv.textContent = `Correct! You guessed the number in ${attempts} attempts.`;
+        feedbackDiv.textContent = `Správně! Uhádl jsi číslo v ${attempts} pokusech.`;
         feedbackDiv.style.color = "green";
         guessButton.style.display = "none";
         resetButton.style.display = "block";
