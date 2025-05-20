@@ -18,7 +18,7 @@ document.addEventListener('keydown', function(event) {
         if (!isAdminMode) {
             isAdminMode = true;
             alert("Debug Mód aktivován. Pro vypnutí stiskněte CTRL + ALT."); // Alert to notify the user
-            feedbackDiv.innerHTML = `<strong>Admin Mode is Active!</strong><br>The secret number is: ${randomNumber}`; // Show the random number
+            feedbackDiv.innerHTML = `<strong>Debug mód je aktivní!</strong><br>Tajné číslo je: ${randomNumber}`; // Show the random number
             feedbackDiv.style.color = "purple"; // Change feedback color for Admin Mode
         } else {
             isAdminMode = false;
