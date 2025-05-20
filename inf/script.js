@@ -1,4 +1,3 @@
-// filepath: c:\Users\matya\Documents\GitHub\jakvos.github.io\inf\script.js
 // Game variables
 let randomNumber = Math.floor(Math.random() * 1000) + 1; // Random number between 1 and 1000
 let attempts = 0;
@@ -54,7 +53,6 @@ function handleGuess() {
         feedbackDiv.style.color = "#DDDDDD";
         guessButton.style.display = "none";
         resetButton.style.display = "block";
-        userGuessInput.disabled = true; // Disable input field after correct guess
     }
 
     userGuessInput.value = ""; // Clear input field
@@ -74,5 +72,4 @@ resetButton.addEventListener("click", function() {
     resetButton.style.display = "none";
     feedbackDiv.textContent = "";
     userGuessInput.value = "";
-    userGuessInput.disabled = false; // Enable input field on reset
 });
