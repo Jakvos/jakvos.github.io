@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Halloweenský kvíz BZDM</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
 </head>
 <body>
-  <form>
-    <label for="name"><p>Kde se teď nacházíte?</p></label>
-    <input type="text" id="name" name="name"><br><br>
+    <div id="game-container">
+        <h1 class="poetsen-one-regular">Guess the Number!</h1>
+        <p>Guess a number between 1 and 1000</p>
+        <input type="number" id="user-guess" placeholder="Enter your guess" />
+        <button id="guess-btn">Guess</button>
+        <div id="feedback"></div>
+        <button id="reset-btn" style="display: none;">Play Again</button>
+    </div>
 
-    <label for="name"><p>Jak se jmenuje kocour z Garfielda?</p></label>
-    <input type="name" id="name" name="name"><br><br>
-
-    <button type="submit" formaction="about.html">Zkontrolovat odpovědi & vyzvednout odměnu</button>
-  </form>
+    <script src="script.js"></script>
 </body>
 </html>
