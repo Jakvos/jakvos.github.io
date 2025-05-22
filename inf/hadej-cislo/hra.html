@@ -134,15 +134,19 @@
                 isAdminMode = !isAdminMode;
                 if (isAdminMode) {
                     // Zobrazí se upozornění a poté debug informace ve feedbackDiv
-                    showCustomAlert("Debug Mód aktivován. Pro vypnutí stiskni CTRL + ALT.");
+                    showCustomAlert("Debug Mód aktivován. Pro vypnutí stiskněte CTRL + ALT.");
+                    // Použijeme innerHTML pro kombinaci textu a HTML elementů
                     feedbackDiv.innerHTML = `<strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong><br><span class="noto-sans-100" style="color: #FFFBDE;">Tajné číslo je: ${randomNumber}</span>`;
                     feedbackDiv.style.color = "#FFFBDE"; // Krémová pro debug mód
-                } else {
-                    // Zobrazí se upozornění a poté se feedbackDiv vyčistí
+                } else { // isAdminMode je vypínán
                     showCustomAlert("Debug mód deaktivován!");
-                    feedbackDiv.innerHTML = `<strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód deaktivován!</strong>`;
-                    feedbackDiv.style.color = "#FFFBDE";
-                    setTimeout(() => { feedbackDiv.textContent = ""; }, 1500); // Vyčistí feedback po krátké pauze
+                    if (userGuessInput.disabled) { // Hra je dokončena (číslo uhodnuto)
+                        // Obnovíme původní zprávu o úspěchu
+                        feedbackDiv.textContent = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;
+                        feedbackDiv.style.color = "#155724"; // Tmavě zelená pro úspěch
+                    } else { // Hra stále probíhá
+                        feedbackDiv.textContent = ""; // Vyčistí zpětnou vazbu
+                    }
                 }
             }
 
@@ -159,39 +163,39 @@
             const userGuess = parseInt(userGuessInput.value);
             attempts++;
 
-            let currentFeedbackText = ""; // Uloží primární text zpětné vazby
-            let currentFeedbackColor = "#FFFBDE"; // Výchozí barva pro obecnou zpětnou vazbu
+            let primaryFeedbackText = ""; // Uloží primární text zpětné vazby
+            let primaryFeedbackColor = "#FFFBDE"; // Výchozí barva pro obecnou zpětnou vazbu
 
             // Validating the guess
             if (isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
-                currentFeedbackText = "Prosím vlož platné číslo od 1 do 1000!";
-                currentFeedbackColor = "#F79B72"; // Oranžová pro upozornění/neplatný vstup
+                primaryFeedbackText = "Prosím vložte platné číslo od 1 do 1000!";
+                primaryFeedbackColor = "#F79B72"; // Oranžová pro upozornění/neplatný vstup
             } else if (userGuess > randomNumber) {
-                currentFeedbackText = "Číslo je moc velké! Zkus to znovu.";
-                currentFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
+                primaryFeedbackText = "Číslo je moc velké! Zkuste to znovu.";
+                primaryFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
             } else if (userGuess < randomNumber) {
-                currentFeedbackText = "Číslo je moc malé! Zkus to znovu.";
-                currentFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
+                primaryFeedbackText = "Číslo je moc malé! Zkuste to znovu.";
+                primaryFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
             } else {
-                currentFeedbackText = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;
-                currentFeedbackColor = "#155724"; /* Tmavě zelená pro úspěch */
+                primaryFeedbackText = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;
+                primaryFeedbackColor = "#155724"; /* Tmavě zelená pro úspěch */
                 guessButton.style.display = "none";
                 resetButton.style.display = "block";
                 userGuessInput.disabled = true;
             }
 
             // Nastaví primární zpětnou vazbu
-            feedbackDiv.textContent = currentFeedbackText;
-            feedbackDiv.style.color = currentFeedbackColor;
+            feedbackDiv.textContent = primaryFeedbackText;
+            feedbackDiv.style.color = primaryFeedbackColor;
 
             // Přidá debug informace, pokud je v admin módu
             if (isAdminMode) {
                 if (userGuess !== randomNumber) { // Nesprávný tip
                     feedbackDiv.innerHTML += `<br><strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong><br><span class="noto-sans-100" style="color: #FFFBDE;">Tajné číslo je: ${randomNumber}</span>`;
                 } else { // Správný tip
-                    // Append debug info below the success message
+                    // Přidá debug info pod zprávu o úspěchu
                     feedbackDiv.innerHTML += `<br><strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong>`;
-                    // "Tajné číslo bylo uhodnuto!" se již nezobrazuje.
+                    // Zpráva "Tajné číslo bylo uhodnuto!" se již nezobrazuje.
                 }
             }
 
