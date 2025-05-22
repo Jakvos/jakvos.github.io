@@ -134,7 +134,7 @@
                 isAdminMode = !isAdminMode;
                 if (isAdminMode) {
                     // Zobrazí se upozornění a poté debug informace ve feedbackDiv
-                    showCustomAlert("Debug Mód aktivován. Pro vypnutí stiskněte CTRL + ALT.");
+                    showCustomAlert("Debug Mód aktivován. Pro vypnutí stiskni CTRL + ALT.");
                     feedbackDiv.innerHTML = `<strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong><br><span class="noto-sans-100" style="color: #FFFBDE;">Tajné číslo je: ${randomNumber}</span>`;
                     feedbackDiv.style.color = "#FFFBDE"; // Krémová pro debug mód
                 } else {
@@ -164,13 +164,13 @@
 
             // Validating the guess
             if (isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
-                currentFeedbackText = "Prosím vložte platné číslo od 1 do 1000!";
+                currentFeedbackText = "Prosím vlož platné číslo od 1 do 1000!";
                 currentFeedbackColor = "#F79B72"; // Oranžová pro upozornění/neplatný vstup
             } else if (userGuess > randomNumber) {
-                currentFeedbackText = "Číslo je moc velké! Zkuste to znovu.";
+                currentFeedbackText = "Číslo je moc velké! Zkus to znovu.";
                 currentFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
             } else if (userGuess < randomNumber) {
-                currentFeedbackText = "Číslo je moc malé! Zkuste to znovu.";
+                currentFeedbackText = "Číslo je moc malé! Zkus to znovu.";
                 currentFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
             } else {
                 currentFeedbackText = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;

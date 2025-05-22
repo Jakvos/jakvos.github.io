@@ -215,7 +215,7 @@
 <body>
     <div id="game-container">
         <h1 class="poetsen-one-regular">Umíš anglicky?</h1>
-        <p class="noto-sans-100">Zkuste uhádnout správný překlad do češtiny.</p>
+        <p class="noto-sans-100">Zkus uhádnout správný překlad do češtiny.</p>
         <p id="english-word" class="poetsen-one-regular" style="font-size: 24px;">Loading...</p>
         <p id="word-counter" class="noto-sans-100" style="font-size: 18px;">Slovo 1 z 10</p>
         <input type="text" id="user-guess" placeholder="Vložte překlad sem" />
@@ -337,7 +337,7 @@
 
             // Kontrola, zda je vstupní pole prázdné
             if (userAnswer === '') {
-                feedbackDiv.textContent = "Prosím, zadejte alespoň jedno písmeno!";
+                feedbackDiv.textContent = "Prosím, zadej alespoň jedno písmeno!";
                 feedbackDiv.style.color = "#FFFBDE"; // Změna barvy pro upozornění
                 userGuessInput.focus();
                 return; // Zastaví další provádění funkce
@@ -381,7 +381,7 @@
         function showFinalScore() {
             const successRate = (score / totalWords) * 100;
             // Zobrazení bodů a úspěšnosti
-            feedbackDiv.innerHTML = `Konec hry! Získali jste ${score} z ${totalWords} bodů. Vaše úspěšnost je: ${successRate.toFixed(2)}%`;
+            feedbackDiv.innerHTML = `Konec hry! Získal jsi ${score} z ${totalWords} bodů. Tvá úspěšnost je: ${successRate.toFixed(2)}%`;
             feedbackDiv.style.color = "#FFFBDE"; // Změna barvy zpětné vazby na konci hry
             submitButton.style.display = "none";
             resetButton.style.display = "block";
@@ -393,7 +393,7 @@
 
         // Funkce pro zobrazení seznamu slov a odpovědí
         function showWordsList() {
-            let htmlContent = `<h2 class="poetsen-one-regular">Přehled slovíček</h2><table><thead><tr><th>Anglicky</th><th>Vaše odpověď</th><th>Správně</th></tr></thead><tbody>`;
+            let htmlContent = `<h2 class="poetsen-one-regular">Přehled slovíček</h2><table><thead><tr><th>Anglicky</th><th>Tvoje odpověď</th><th>Správně</th></tr></thead><tbody>`;
             userAnswers.forEach(answer => {
                 const answerClass = answer.isCorrect ? "correct" : "incorrect";
                 htmlContent += `<tr class="${answerClass}">
@@ -403,7 +403,7 @@
                                 </tr>`;
             });
             htmlContent += "</tbody></table>";
-            htmlContent += "<p class='noto-sans-100' style='margin-top: 20px;'>Stiskněte ESC pro zavření tabulky.</p>";
+            htmlContent += "<p class='noto-sans-100' style='margin-top: 20px;'>Stiskni ESC pro zavření tabulky.</p>";
             wordsListContentDiv.innerHTML = htmlContent;
             wordsListDiv.style.display = "block"; // Zobrazit seznam
             wordsListContentDiv.classList.add('slide-down'); // Spustit animaci slideDown na obsahu
