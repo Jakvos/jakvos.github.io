@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hádání čísla</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&family=Noto+Sans:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #062C2A;
+        }
+
+        #game-container {
+            display: inline-block;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #096B68;
+            width: 300px;
+            height: 350px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: #2A4759;
+            background-color: #90D1CA;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #129990;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #reset-btn {
+            background-color: #f44336;
+        }
+
+        #reset-btn:hover {
+            background-color: #e53935;
+        }
+
+        .poetsen-one-regular {
+            font-family: "Poetsen One", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #FFFBDE;
+        }
+
+        .noto-sans-100 {
+            font-family: "Noto Sans", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #FFFBDE;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1 class="poetsen-one-regular">Uhádni číslo!</h1>
+        <p class="noto-sans-100">Uhádni číslo mezi 1 a 1000.</p>
+        <input type="number" id="user-guess" placeholder="Vlož svůj tip sem." />
+        <button id="guess-btn">Hádej!</button>
+        <div id="feedback"></div>
+        <button id="reset-btn" style="display: none;">Zkusit znovu?</button>
+    </div>
+
+    <script>
+        // Game variables
+        let randomNumber = Math.floor(Math.random() * 1000) + 1;
+        let attempts = 0;
+        let isAdminMode = false;
+
+        // DOM elements
+        const guessButton = document.getElementById("guess-btn");
+        const resetButton = document.getElementById("reset-btn");
+        const feedbackDiv = document.getElementById("feedback");
+        const userGuessInput = document.getElementById("user-guess");
+
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.altKey) {
+                isAdminMode = !isAdminMode;
+                if (isAdminMode) {
+                    showCustomAlert("Debug Mód aktivován. Pro vypnutí stiskněte CTRL + ALT.");
+                    feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
+                    feedbackDiv.style.color = "#FFFBDE";
+                } else {
+                    showCustomAlert("Debug mód deaktivován!");
+                    feedbackDiv.innerHTML = "";
+                }
+            }
+
+            if (event.key === 'Enter' && document.activeElement === userGuessInput && !userGuessInput.disabled) {
+                handleGuess();
+            }
+        });
+
+        function handleGuess() {
+            if (userGuessInput.disabled) return;
+
+            const userGuess = parseInt(userGuessInput.value);
+            attempts++;
+
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
+                feedbackDiv.textContent = "Prosím vložte platné číslo od 1 do 1000!";
+                feedbackDiv.style.color = "#F79B72";
+            } else if (userGuess > randomNumber) {
+                feedbackDiv.textContent = "Číslo je moc velké! Zkuste to znovu.";
+                feedbackDiv.style.color = "orange";
+            } else if (userGuess < randomNumber) {
+                feedbackDiv.textContent = "Číslo je moc malé! Zkuste to znovu.";
+                feedbackDiv.style.color = "orange";
+            } else {
+                feedbackDiv.textContent = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;
+                feedbackDiv.style.color = "#DDDDDD";
+                guessButton.style.display = "none";
+                resetButton.style.display = "block";
+                userGuessInput.disabled = true;
+            }
+
+            if (userGuess !== randomNumber) {
+                userGuessInput.value = "";
+            }
+            userGuessInput.focus();
+        }
+
+        guessButton.addEventListener("click", function() {
+            handleGuess();
+        });
+
+        resetButton.addEventListener("click", function() {
+            randomNumber = Math.floor(Math.random() * 1000) + 1;
+            attempts = 0;
+            guessButton.style.display = "block";
+            resetButton.style.display = "none";
+            feedbackDiv.textContent = "";
+            userGuessInput.value = "";
+            userGuessInput.disabled = false;
+            userGuessInput.focus();
+
+            if (isAdminMode) {
+                feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
+                feedbackDiv.style.color = "#FFFBDE";
+            }
+        });
+
+        function showCustomAlert(message) {
+            const existingAlert = document.getElementById('custom-alert-modal');
+            if (existingAlert) existingAlert.remove();
+
+            const modalOverlay = document.createElement('div');
+            modalOverlay.id = 'custom-alert-modal';
+            modalOverlay.style.position = 'fixed';
+            modalOverlay.style.top = '0';
+            modalOverlay.style.left = '0';
+            modalOverlay.style.width = '100%';
+            modalOverlay.style.height = '100%';
+            modalOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            modalOverlay.style.display = 'flex';
+            modalOverlay.style.justifyContent = 'center';
+            modalOverlay.style.alignItems = 'center';
+            modalOverlay.style.zIndex = '1000';
+
+            const modalContent = document.createElement('div');
+            modalContent.style.backgroundColor = '#fff';
+            modalContent.style.padding = '20px';
+            modalContent.style.borderRadius = '8px';
+            modalContent.style.textAlign = 'center';
+            modalContent.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+            modalContent.style.fontFamily = '"Noto Sans", sans-serif';
+
+            const modalMessage = document.createElement('p');
+            modalMessage.textContent = message;
+            modalMessage.style.marginBottom = '15px';
+            modalMessage.style.color = '#333';
+
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'OK';
+            closeButton.style.padding = '10px 20px';
+            closeButton.style.border = 'none';
+            closeButton.style.borderRadius = '5px';
+            closeButton.style.backgroundColor = '#007bff';
+            closeButton.style.color = 'white';
+            closeButton.style.cursor = 'pointer';
+
+            modalContent.appendChild(modalMessage);
+            modalContent.appendChild(closeButton);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
+
+            closeButton.onclick = function() {
+                modalOverlay.remove();
+            };
+            modalOverlay.onclick = function(event) {
+                if (event.target === modalOverlay) {
+                    modalOverlay.remove();
+                }
+            };
+        }
+    </script>
+</body>
+</html>
