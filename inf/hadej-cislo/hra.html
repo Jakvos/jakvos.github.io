@@ -8,38 +8,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&family=Noto+Sans:wght@400&display=swap" rel="stylesheet">
     <style>
+        /* Základní styly pro tělo stránky */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
-            background-color: #062C2A;
+            background-color: #4D869C; /* Tmavě modrozelené pozadí (z Umíš anglicky?) */
+            overflow: hidden; /* Zabrání posuvníkům */
         }
 
+        /* Kontejner pro hru */
         #game-container {
             display: inline-block;
             padding: 20px;
-            border: 2px solid #333;
+            border: 2px solid #333; /* Tmavší okraj */
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #096B68;
+            background-color: #7AB2B2; /* Světlejší modrozelené pozadí (z Umíš anglicky?) */
             width: 300px;
-            height: 350px;
+            height: 400px; /* Zvětšena výška, aby se vešly všechny prvky */
             box-sizing: border-box; /* Zajistí, že padding neovlivní výšku */
         }
 
+        /* Styly pro vstupní pole */
         input {
             padding: 10px;
             font-size: 18px;
             margin-top: 10px;
             border-radius: 10px;
-            border: #2A4759;
-            background-color: #90D1CA;
+            border: 1px solid #2A4759; /* Tmavší modrý okraj (z Umíš anglicky?) */
+            background-color: #90D1CA; /* Světlejší tyrkysové pozadí (z Umíš anglicky?) */
+            width: 100%; /* Rozšíří input na 100% šířky kontejneru */
+            box-sizing: border-box; /* Zajistí, že padding neovlivní šířku */
+            color: #2A4759; /* Barva textu v inputu (z Umíš anglicky?) */
         }
 
+        /* Barva placeholderu ve vstupním poli */
+        input::placeholder {
+            color: rgba(42, 71, 89, 0.7); /* Tmavší modrá s průhledností */
+        }
+
+        /* Styly pro tlačítka */
         button {
             padding: 10px 20px;
             font-size: 18px;
-            background-color: #129990;
+            background-color: #4D869C; /* Tmavě modrozelené pozadí (z Umíš anglicky?) */
             color: white;
             border: none;
             cursor: pointer;
@@ -47,39 +60,49 @@
             border-radius: 10px;
             width: 100%; /* Tlačítka budou mít konstantní šířku */
             box-sizing: border-box; /* Zajistí, že velikost tlačítka nebude ovlivněna paddingem */
+            transition: background-color 0.3s ease; /* Plynulý přechod barvy při najetí myší */
         }
 
+        /* Efekt najetí myší na tlačítka */
         button:hover {
-            background-color: #45a049;
+            background-color: #2A4759; /* Tmavší modré pozadí (z Umíš anglicky?) */
         }
 
+        /* Styly pro zpětnou vazbu */
         #feedback {
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
             min-height: 40px; /* Nastaví minimální výšku pro feedback, aby se nezměnila při zobrazení textu */
+            font-family: "Noto Sans", sans-serif; /* Font pro zpětnou vazbu */
+            font-weight: 400;
+            color: #FFFBDE; /* Výchozí barva zpětné vazby (krémová) */
         }
 
+        /* Styly pro tlačítko reset */
         #reset-btn {
-            background-color: #f44336;
+            background-color: #f44336; /* Červené pozadí (zachováno) */
         }
 
+        /* Efekt najetí myší na tlačítko reset */
         #reset-btn:hover {
-            background-color: #e53935;
+            background-color: #e53935; /* Tmavší červené pozadí (zachováno) */
         }
 
+        /* Font "Poetsen One" pro nadpisy */
         .poetsen-one-regular {
             font-family: "Poetsen One", sans-serif;
             font-weight: 400;
             font-style: normal;
-            color: #FFFBDE;
+            color: #FFFBDE; /* Světle žlutá barva */
         }
 
+        /* Font "Noto Sans" pro běžný text */
         .noto-sans-100 {
             font-family: "Noto Sans", sans-serif;
             font-weight: 400;
             font-style: normal;
-            color: #FFFBDE;
+            color: #FFFBDE; /* Světle žlutá barva */
         }
     </style>
 </head>
@@ -110,13 +133,16 @@
             if (event.ctrlKey && event.altKey) {
                 isAdminMode = !isAdminMode;
                 if (isAdminMode) {
+                    // Zobrazí se upozornění a poté debug informace ve feedbackDiv
                     showCustomAlert("Debug Mód aktivován. Pro vypnutí stiskněte CTRL + ALT.");
-                    // Display the random number when debug mode is activated
-                    feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
-                    feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug mód
+                    feedbackDiv.innerHTML = `<strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong><br><span class="noto-sans-100" style="color: #FFFBDE;">Tajné číslo je: ${randomNumber}</span>`;
+                    feedbackDiv.style.color = "#FFFBDE"; // Krémová pro debug mód
                 } else {
+                    // Zobrazí se upozornění a poté se feedbackDiv vyčistí
                     showCustomAlert("Debug mód deaktivován!");
-                    feedbackDiv.innerHTML = ""; // Clear feedback when debug mode is off
+                    feedbackDiv.innerHTML = `<strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód deaktivován!</strong>`;
+                    feedbackDiv.style.color = "#FFFBDE";
+                    setTimeout(() => { feedbackDiv.textContent = ""; }, 1500); // Vyčistí feedback po krátké pauze
                 }
             }
 
@@ -133,37 +159,44 @@
             const userGuess = parseInt(userGuessInput.value);
             attempts++;
 
+            let currentFeedbackText = ""; // Uloží primární text zpětné vazby
+            let currentFeedbackColor = "#FFFBDE"; // Výchozí barva pro obecnou zpětnou vazbu
+
             // Validating the guess
             if (isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
-                feedbackDiv.textContent = "Prosím vložte platné číslo od 1 do 1000!";
-                feedbackDiv.style.color = "#F79B72"; // Oranžová pro nápovědu
+                currentFeedbackText = "Prosím vložte platné číslo od 1 do 1000!";
+                currentFeedbackColor = "#F79B72"; // Oranžová pro upozornění/neplatný vstup
             } else if (userGuess > randomNumber) {
-                feedbackDiv.textContent = "Číslo je moc velké! Zkuste to znovu.";
-                feedbackDiv.style.color = "orange"; // Oranžová pro nápovědu
+                currentFeedbackText = "Číslo je moc velké! Zkuste to znovu.";
+                currentFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
             } else if (userGuess < randomNumber) {
-                feedbackDiv.textContent = "Číslo je moc malé! Zkuste to znovu.";
-                feedbackDiv.style.color = "orange"; // Oranžová pro nápovědu
+                currentFeedbackText = "Číslo je moc malé! Zkuste to znovu.";
+                currentFeedbackColor = "#FFFBDE"; /* Krémová pro nápovědu, aby byla viditelná */
             } else {
-                feedbackDiv.textContent = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;
-                feedbackDiv.style.color = "#DDDDDD"; // Bílá pro úspěch
+                currentFeedbackText = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;
+                currentFeedbackColor = "#155724"; /* Tmavě zelená pro úspěch */
                 guessButton.style.display = "none";
                 resetButton.style.display = "block";
                 userGuessInput.disabled = true;
+            }
 
-                // If admin mode is active, show debug information after the correct guess
-                if (isAdminMode) {
-                    feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo bylo uhodnuto!</p>`;
-                    feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug
+            // Nastaví primární zpětnou vazbu
+            feedbackDiv.textContent = currentFeedbackText;
+            feedbackDiv.style.color = currentFeedbackColor;
+
+            // Přidá debug informace, pokud je v admin módu
+            if (isAdminMode) {
+                if (userGuess !== randomNumber) { // Nesprávný tip
+                    feedbackDiv.innerHTML += `<br><strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong><br><span class="noto-sans-100" style="color: #FFFBDE;">Tajné číslo je: ${randomNumber}</span>`;
+                } else { // Správný tip
+                    // Append debug info below the success message
+                    feedbackDiv.innerHTML += `<br><strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong>`;
+                    // "Tajné číslo bylo uhodnuto!" se již nezobrazuje.
                 }
             }
 
-            // Clear input if the guess is incorrect (while keeping debug mode active)
-            if (userGuess !== randomNumber) {
-                if (isAdminMode) {
-                    // Show the secret number if admin mode is active
-                    feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
-                    feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug mód
-                }
+            // Vyčistí input, pokud je tip nesprávný nebo neplatný
+            if (userGuess !== randomNumber || isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
                 userGuessInput.value = "";
             }
 
@@ -188,8 +221,8 @@
 
             // Show secret number if debug mode is active after reset
             if (isAdminMode) {
-                feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
-                feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug
+                feedbackDiv.innerHTML = `<strong class="noto-sans-100" style="color: #FFFBDE;">Debug mód je aktivní!</strong><br><span class="noto-sans-100" style="color: #FFFBDE;">Tajné číslo je: ${randomNumber}</span>`;
+                feedbackDiv.style.color = "#FFFBDE"; // Krémová pro debug
             }
         });
 
@@ -212,26 +245,34 @@
             modalOverlay.style.zIndex = '1000';
 
             const modalContent = document.createElement('div');
-            modalContent.style.backgroundColor = '#fff';
+            modalContent.style.backgroundColor = '#7AB2B2'; /* Světlejší modrozelené pozadí (z Umíš anglicky?) */
             modalContent.style.padding = '20px';
             modalContent.style.borderRadius = '8px';
             modalContent.style.textAlign = 'center';
             modalContent.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-            modalContent.style.fontFamily = '"Noto Sans", sans-serif';
+            modalContent.style.fontFamily = '"Noto Sans", sans-serif'; /* Font pro obsah alertu */
+            modalContent.style.color = '#2A4759'; /* Barva textu v alertu */
 
             const modalMessage = document.createElement('p');
             modalMessage.textContent = message;
             modalMessage.style.marginBottom = '15px';
-            modalMessage.style.color = '#333';
+            modalMessage.style.color = '#2A4759'; /* Tmavší modrá barva textu */
+            modalMessage.style.fontFamily = '"Noto Sans", sans-serif';
 
             const closeButton = document.createElement('button');
             closeButton.textContent = 'OK';
             closeButton.style.padding = '10px 20px';
             closeButton.style.border = 'none';
             closeButton.style.borderRadius = '5px';
-            closeButton.style.backgroundColor = '#007bff';
+            closeButton.style.backgroundColor = '#4D869C'; /* Tmavě modrozelené pozadí (z Umíš anglicky?) */
             closeButton.style.color = 'white';
             closeButton.style.cursor = 'pointer';
+            closeButton.style.fontFamily = '"Noto Sans", sans-serif'; /* Font pro tlačítko OK */
+            closeButton.style.transition = 'background-color 0.3s ease';
+
+            closeButton.onmouseover = function() { closeButton.style.backgroundColor = '#2A4759'; }; /* Hover efekt */
+            closeButton.onmouseout = function() { closeButton.style.backgroundColor = '#4D869C'; }; /* Návrat barvy */
+
 
             modalContent.appendChild(modalMessage);
             modalContent.appendChild(closeButton);

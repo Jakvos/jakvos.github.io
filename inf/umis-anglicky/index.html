@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umíš anglicky?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&family=Noto+Sans:wght@400&display=swap" rel="stylesheet">
+    <style>
+        /* Základní styly pro tělo stránky */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #4D869C; /* Tmavě modrozelené pozadí */
+            overflow: hidden; /* Zabrání posuvníkům */
+        }
+
+        /* Kontejner pro hru */
+        #game-container {
+            display: inline-block;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #7AB2B2; /* Světlejší modrozelené pozadí */
+            width: 350px;
+            height: 500px;
+            box-sizing: border-box;
+            position: relative; /* Pro z-index a umístění tabulky */
+            z-index: 1;
+        }
+
+        /* Styly pro vstupní pole */
+        input {
+            padding: 10px;
+            font-size: 18px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: #2A4759; /* Tmavší modrý okraj */
+            background-color: #90D1CA; /* Světlejší tyrkysové pozadí */
+            width: 100%;
+            box-sizing: border-box;
+            color: #2A4759; /* Barva textu v inputu */
+        }
+
+        /* Barva placeholderu ve vstupním poli */
+        input::placeholder {
+            color: rgba(42, 71, 89, 0.7);
+        }
+
+        /* Styly pro tlačítka */
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4D869C; /* Tmavě modrozelené pozadí */
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease; /* Plynulý přechod barvy při najetí myší */
+        }
+
+        /* Efekt najetí myší na tlačítka */
+        button:hover {
+            background-color: #2A4759; /* Tmavší modré pozadí */
+        }
+
+        /* Styly pro zpětnou vazbu */
+        #feedback {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 40px;
+            /* Nové styly pro font */
+            font-family: "Noto Sans", sans-serif;
+            font-weight: 400;
+        }
+
+        /* Styly pro tlačítko reset */
+        #reset-btn {
+            background-color: #f44336; /* Červené pozadí */
+        }
+
+        /* Efekt najetí myší na tlačítko reset */
+        #reset-btn:hover {
+            background-color: #e53935; /* Tmavší červené pozadí */
+        }
+
+        /* Font "Poetsen One" pro nadpisy */
+        .poetsen-one-regular {
+            font-family: "Poetsen One", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #FFFBDE; /* Světle žlutá barva */
+        }
+
+        /* Font "Noto Sans" pro běžný text */
+        .noto-sans-100 {
+            font-family: "Noto Sans", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #FFFBDE; /* Světle žlutá barva */
+        }
+
+        /* Styly pro vyskakovací tabulku (překryv) */
+        #words-list {
+            display: none; /* Skryté na začátku */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9); /* Tmavší pozadí pro lepší kontrast */
+            color: #FFFBDE;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out; /* Animace objevení */
+        }
+
+        /* Kontejner pro obsah tabulky uvnitř překryvu */
+        #words-list-content {
+            max-width: 800px; /* Omezte šířku tabulky */
+            margin: 50px auto; /* Centrujte tabulku */
+            background-color: #7AB2B2; /* Pozadí tabulky */
+            border-radius: 15px; /* Zaoblené rohy */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Výraznější stín */
+            padding: 20px;
+            animation: slideDown 0.5s ease-out; /* Animace vysunutí */
+        }
+
+        /* Styly pro samotnou tabulku */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #7AB2B2; /* Základní pozadí tabulky */
+            border-radius: 10px;
+            overflow: hidden; /* Pro správné zaoblení rohů s border-collapse */
+        }
+
+        /* Styly pro hlavičky tabulky */
+        th {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 251, 222, 0.3); /* Světlejší oddělovací čára */
+            background-color: #90D1CA; /* Světlejší pozadí záhlaví */
+            font-weight: bold;
+            color: #2A4759; /* Tmavší modrá barva textu */
+            text-transform: uppercase;
+            font-family: "Poetsen One", sans-serif; /* Použití fontu Poetsen One pro hlavičky */
+        }
+
+        /* Styly pro buňky tabulky */
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 251, 222, 0.3); /* Světlejší oddělovací čára */
+            color: #2A4759; /* Tmavší modrá barva textu */
+            font-family: "Noto Sans", sans-serif; /* Použití fontu Noto Sans pro obsah */
+            font-weight: 400;
+        }
+
+        /* Střídavé barvy pro sudé řádky tabulky */
+        tr:nth-child(even) {
+            background-color: #FFFBDE; /* Světlejší barva */
+        }
+        
+        /* Střídavé barvy pro liché řádky tabulky */
+        tr:nth-child(odd) {
+            background-color: #C1E9E6; /* Tmavší barva */
+        }
+
+        /* Styly pro správné odpovědi v tabulce */
+        .correct {
+            background-color: #d4edda; /* Světle zelené pozadí */
+            color: #155724; /* Tmavě zelený text */
+        }
+
+        /* Styly pro nesprávné odpovědi v tabulce */
+        .incorrect {
+            background-color: #f8d7da; /* Světle červené pozadí */
+            color: #721c24; /* Tmavě červený text */
+        }
+
+        /* Animace pro plynulé objevení */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Animace pro vysunutí shora */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1 class="poetsen-one-regular">Umíš anglicky?</h1>
+        <p class="noto-sans-100">Zkuste uhádnout správný překlad do češtiny.</p>
+        <p id="english-word" class="poetsen-one-regular" style="font-size: 24px;">Loading...</p>
+        <p id="word-counter" class="noto-sans-100" style="font-size: 18px;">Slovo 1 z 10</p>
+        <input type="text" id="user-guess" placeholder="Vložte překlad sem" />
+        <button id="submit-btn">Odpovědět</button>
+        <div id="feedback"></div>
+        <button id="reset-btn" style="display: none;">Zkusit znovu</button>
+        <button id="show-words-btn" style="display: none;">Zobrazit slova a jejich překlady</button>
+        
+    </div>
+    <div id="words-list">
+        <div id="words-list-content"></div>
+    </div>
+
+    <script>
+        // Databáze slovíček se synonyma
+        const wordList = [
+            { english: "abandon", czech: "opustit", synonyms: ["zanechat", "opuštění", "vzdát", "nechat"] },
+            { english: "accomplish", czech: "dokončit", synonyms: ["splnit", "uskutečnit", "dosáhnout", "provést"] },
+            { english: "accuse", czech: "obvinit", synonyms: ["vinit", "obžalovat", "nařknout", "podezřívat"] },
+            { english: "adventure", czech: "dobrodružství", synonyms: ["výprava", "pohádka", "expedice", "příběh"] },
+            { english: "bizarre", czech: "podivný", synonyms: ["zvláštní", "neobvyklý", "divný", "nechápavý"] },
+            { english: "calm", czech: "klidný", synonyms: ["pokojný", "poklidný", "mírný", "uvolněný"] },
+            { english: "confuse", czech: "zmást", synonyms: ["popletený", "mít zmatek", "zavést", "splést"] },
+            { english: "defend", czech: "bránit", synonyms: ["chránit", "obhajovat", "zastávat", "ochraňovat"] },
+            { english: "eliminate", czech: "eliminovat", synonyms: ["odstranit", "vyřadit", "vypustit", "zlikvidovat"] },
+            { english: "enormous", czech: "obrovský", synonyms: ["gigantický", "ohromný", "obrovitý", "monstrózní"] },
+            { english: "evidence", czech: "důkaz", synonyms: ["doklad", "potvrzení", "podezření", "prvky"] },
+            { english: "genuine", czech: "skutečný", synonyms: ["pravý", "autentický", "opravdový", "originální"] },
+            { english: "harm", czech: "škoda", synonyms: ["ublížit", "poškození", "rána", "neštěstí"] },
+            { english: "horrible", czech: "hrozný", synonyms: ["strašný", "otřesný", "děsivý", "příšerný"] },
+            { english: "honest", czech: "poctivý", synonyms: ["upřímný", "čestný", "pravdivý", "férový"] },
+            { english: "imagine", czech: "představit", synonyms: ["snít", "představit si", "věřit", "domnívat se"] },
+            { english: "impact", czech: "dopad", synonyms: ["efekt", "vliv", "následek", "účinek"] },
+            { english: "inspire", czech: "inspirovat", synonyms: ["motivovat", "podnítit", "povzbudit", "strhnout"] },
+            { english: "interview", czech: "rozhovor", synonyms: ["pohovor", "schůzka", "porada", "diskuze"] },
+            { english: "maintain", czech: "udržovat", synonyms: ["zachovat", "držet", "ochraňovat", "stabilizovat"] },
+            { english: "mysterious", czech: "tajemný", synonyms: ["záhadný", "neznámý", "nevyřešený", "nevysvětlitelný"] },
+            { english: "neglect", czech: "zanedbávat", synonyms: ["ignorovat", "nebrat v úvahu", "neopatrovat", "přehlížet"] },
+            { english: "obstacle", czech: "překážka", synonyms: ["problém", "bariéra", "blokáda", "limita"] },
+            { english: "opinion", czech: "názor", synonyms: ["pohled", "stanovisko", "výhled", "úsudek"] },
+            { english: "perform", czech: "provádět", synonyms: ["uskutečnit", "zrealizovat", "skládat", "plnit"] },
+            { english: "predict", czech: "předpovědět", synonyms: ["odhadnout", "určit", "prognóza", "předvídat"] },
+            { english: "progress", czech: "pokrok", synonyms: ["vývoj", "rozvoj", "pokračování", "zlepšení"] },
+            { english: "replace", czech: "nahradit", synonyms: ["vyměnit", "zastoupit", "nahrazovat", "zaměnit"] },
+            { english: "reliable", czech: "spolehlivý", synonyms: ["důvěryhodný", "stabilní", "solidní", "odpovědný"] },
+            { english: "sensitive", czech: "citlivý", synonyms: ["jemný", "vnímavý", "vzdělaný", "empatický"] },
+            { english: "situation", czech: "situace", synonyms: ["stav", "podmínky", "kondice", "okamžik"] },
+            { english: "success", czech: "úspěch", synonyms: ["vítězství", "prosperita", "dokonalost", "pozitivní výsledek"] },
+            { english: "symbol", czech: "symbol", synonyms: ["značka", "znak", "piktogram", "logo"] },
+            { english: "temporary", czech: "dočasný", synonyms: ["krátkodobý", "přechodný", "prozatímní", "momentální"] },
+            { english: "tolerate", czech: "tolerovat", synonyms: ["snášet", "trpět", "přijímat", "akceptovat"] },
+            { english: "tough", czech: "tvrdý", synonyms: ["pevný", "odolný", "neústupný", "sílící"] },
+            { english: "unpredictable", czech: "nepředvídatelný", synonyms: ["náhodný", "neznámý", "roztřesený"] },
+            { english: "valuable", czech: "cenný", synonyms: ["drahý", "skvostný", "významný", "neocenitelný"] },
+            { english: "virtual", czech: "virtuální", synonyms: ["digitální", "nefyzický", "internetový", "neexistující"] },
+            { english: "vulnerable", czech: "zranitelný", synonyms: ["citlivý", "ohrožený", "nechráněný", "riskantní"] },
+            { english: "worthy", czech: "hodný", synonyms: ["zasloužilý", "vhodný", "vznešený", "platný"] },
+            { english: "Achieve", czech: "dosáhnout", synonyms: ["splnit", "uskutečnit", "provést", "realizovat"] },
+            { english: "Adapt", czech: "adaptovat", synonyms: ["přizpůsobit", "modifikovat", "měnit", "přizpůsobit se"] },
+            { english: "Category", czech: "kategorie", synonyms: ["typ", "druh", "třída", "skupina"] },
+            { english: "Create", czech: "vytvořit", synonyms: ["generovat", "rozvíjet", "navrhnout", "skládat"] },
+            { english: "Decline", czech: "odmítnout", synonyms: ["zamítnout", "nepřijmout", "klesnout", "snížit"] },
+            { english: "Focus", czech: "soustředit se", synonyms: ["koncentrovat", "zaměřit", "zůstat zaměřený", "reflektovat"] },
+            { english: "decide", czech: "rozhodnout", synonyms: ["zvolit", "určit", "stanovit", "vybrat"] },
+            { english: "borrow", czech: "půjčit si", synonyms: ["vzít", "získat", "požádat", "zapůjčit"] },
+            { english: "improve", czech: "zlepšit", synonyms: ["vylepšit", "vytvořit", "udělat lépe", "zvýšit"] },
+            { english: "advice", czech: "rada", synonyms: ["tip", "doporučení", "porada", "nápad"] }
+        ];
+
+        // Proměnné hry
+        let currentWordIndex = 0;
+        let score = 0;
+        let totalWords = 10; // Počet slov je vždy 10
+        let currentWord;
+        const userAnswers = [];
+        let usedWords = [];
+
+        // DOM elementy
+        const englishWord = document.getElementById("english-word");
+        const userGuessInput = document.getElementById("user-guess");
+        const submitButton = document.getElementById("submit-btn");
+        const feedbackDiv = document.getElementById("feedback");
+        const resetButton = document.getElementById("reset-btn");
+        const showWordsButton = document.getElementById("show-words-btn");
+        const wordsListDiv = document.getElementById("words-list");
+        const wordsListContentDiv = document.getElementById("words-list-content");
+        const wordCounter = document.getElementById("word-counter");
+
+        // Funkce pro získání náhodného slovíčka, které ještě nebylo použito
+        function getRandomWord() {
+            // Pokud jsme vyčerpali všechna slova z wordList, nebo se blížíme k limitu 10 slov a nemáme dostatek unikátních, resetujeme usedWords.
+            // Pro pevný počet 10 slov stačí zajistit, aby se slova neopakovala v rámci jedné hry.
+            if (usedWords.length === wordList.length || usedWords.length >= totalWords) {
+                usedWords = []; // Reset seznamu použitých slov
+            }
+            let word;
+            do {
+                word = wordList[Math.floor(Math.random() * wordList.length)];
+            } while (usedWords.includes(word.english));
+            usedWords.push(word.english); // Označení slova jako použitého
+            return word;
+        }
+
+        // Funkce pro zobrazení aktuálního slova
+        function displayWord() {
+            currentWord = getRandomWord();
+            englishWord.textContent = currentWord.english;
+            wordCounter.textContent = `Slovo ${currentWordIndex + 1} z ${totalWords}`;
+            userGuessInput.value = '';
+            feedbackDiv.textContent = '';
+            userGuessInput.focus(); // Zaměřit input pole po zobrazení nového slova
+        }
+
+        // Funkce pro kontrolu správnosti odpovědi (včetně synonym)
+        function checkAnswer() {
+            if (userGuessInput.disabled) return; // Zabránit odpovědím, pokud je input zakázaný
+
+            const userAnswer = userGuessInput.value.trim().toLowerCase();
+
+            // Kontrola, zda je vstupní pole prázdné
+            if (userAnswer === '') {
+                feedbackDiv.textContent = "Prosím, zadejte alespoň jedno písmeno!";
+                feedbackDiv.style.color = "#FFFBDE"; // Změna barvy pro upozornění
+                userGuessInput.focus();
+                return; // Zastaví další provádění funkce
+            }
+
+            // Zajištění, že hlavní odpověď i synonyma jsou oříznuta a malými písmeny
+            const correctAnswers = [
+                currentWord.czech.toLowerCase().trim(),
+                ...currentWord.synonyms.map(synonym => synonym.toLowerCase().trim())
+            ];
+
+            const isCorrect = correctAnswers.includes(userAnswer);
+
+            userAnswers.push({
+                word: currentWord.english,
+                correctAnswer: currentWord.czech,
+                userAnswer: userAnswer,
+                isCorrect: isCorrect
+            });
+
+            if (isCorrect) {
+                score++;
+                feedbackDiv.textContent = "Výborně!";
+                feedbackDiv.style.color = "green";
+            } else {
+                feedbackDiv.textContent = `Bohužel, správně je "${currentWord.czech}"`;
+                feedbackDiv.style.color = "red";
+            }
+
+            currentWordIndex++;
+
+            if (currentWordIndex < totalWords) {
+                // Krátká pauza před dalším slovem pro zobrazení zpětné vazby
+                setTimeout(displayWord, 1000); 
+            } else {
+                showFinalScore();
+            }
+        }
+
+        // Funkce pro zobrazení konečného skóre a seznamu slov
+        function showFinalScore() {
+            const successRate = (score / totalWords) * 100;
+            // Zobrazení bodů a úspěšnosti
+            feedbackDiv.innerHTML = `Konec hry! Získali jste ${score} z ${totalWords} bodů. Vaše úspěšnost je: ${successRate.toFixed(2)}%`;
+            feedbackDiv.style.color = "#FFFBDE"; // Změna barvy zpětné vazby na konci hry
+            submitButton.style.display = "none";
+            resetButton.style.display = "block";
+            showWordsButton.style.display = "block";
+            userGuessInput.disabled = true; // Zakázat input po skončení hry
+            englishWord.textContent = "Hra skončila!"; // Změňte zobrazený text
+            wordCounter.textContent = ""; // Skryjte počítadlo slov
+        }
+
+        // Funkce pro zobrazení seznamu slov a odpovědí
+        function showWordsList() {
+            let htmlContent = `<h2 class="poetsen-one-regular">Přehled slovíček</h2><table><thead><tr><th>Anglicky</th><th>Vaše odpověď</th><th>Správně</th></tr></thead><tbody>`;
+            userAnswers.forEach(answer => {
+                const answerClass = answer.isCorrect ? "correct" : "incorrect";
+                htmlContent += `<tr class="${answerClass}">
+                                    <td>${answer.word}</td>
+                                    <td>${answer.userAnswer || "N/A"}</td>
+                                    <td>${answer.correctAnswer}</td>
+                                </tr>`;
+            });
+            htmlContent += "</tbody></table>";
+            htmlContent += "<p class='noto-sans-100' style='margin-top: 20px;'>Stiskněte ESC pro zavření tabulky.</p>";
+            wordsListContentDiv.innerHTML = htmlContent;
+            wordsListDiv.style.display = "block"; // Zobrazit seznam
+            wordsListContentDiv.classList.add('slide-down'); // Spustit animaci slideDown na obsahu
+        }
+
+        // Funkce pro skrytí seznamu slov
+        function hideWordsList() {
+            wordsListDiv.style.display = "none";
+            wordsListContentDiv.classList.remove('slide-down'); // Odebrat třídu pro reset animace
+        }
+
+        // Posluchač události pro odeslání odpovědi
+        submitButton.addEventListener("click", checkAnswer);
+
+        // Posluchač události pro resetování hry
+        resetButton.addEventListener("click", function() {
+            score = 0;
+            currentWordIndex = 0;
+            userAnswers.length = 0; // Vymazat odpovědi
+            usedWords = []; // Vymazat seznam použitých slov
+            submitButton.style.display = "block";
+            resetButton.style.display = "none";
+            showWordsButton.style.display = "none";
+            hideWordsList(); // Skrýt seznam slovíček
+            userGuessInput.disabled = false; // Povolit input
+            displayWord();
+        });
+
+        // Posluchač události pro zobrazení seznamu slov
+        showWordsButton.addEventListener("click", showWordsList);
+
+        // Funkce pro odeslání odpovědi pomocí klávesy Enter
+        function handleAnswerSubmission(event) {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        }
+
+        // Přidat posluchač události pro stisk klávesy Enter na vstupním poli
+        userGuessInput.addEventListener("keydown", handleAnswerSubmission);
+
+        // Posluchač události pro stisk klávesy ESC na celém dokumentu
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" && wordsListDiv.style.display === "block") {
+                hideWordsList();
+            }
+        });
+
+        // Spustit hru
+        displayWord();
+    </script>
+</body>
+</html>
