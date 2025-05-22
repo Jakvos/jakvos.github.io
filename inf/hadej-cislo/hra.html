@@ -24,6 +24,7 @@
             background-color: #096B68;
             width: 300px;
             height: 350px;
+            box-sizing: border-box; /* Zajistí, že padding neovlivní výšku */
         }
 
         input {
@@ -44,6 +45,8 @@
             cursor: pointer;
             margin-top: 10px;
             border-radius: 10px;
+            width: 100%; /* Tlačítka budou mít konstantní šířku */
+            box-sizing: border-box; /* Zajistí, že velikost tlačítka nebude ovlivněna paddingem */
         }
 
         button:hover {
@@ -54,6 +57,7 @@
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
+            min-height: 40px; /* Nastaví minimální výšku pro feedback, aby se nezměnila při zobrazení textu */
         }
 
         #reset-btn {
@@ -101,57 +105,77 @@
         const feedbackDiv = document.getElementById("feedback");
         const userGuessInput = document.getElementById("user-guess");
 
+        // Admin Mode check (Ctrl+Alt for debug mode)
         document.addEventListener('keydown', function(event) {
             if (event.ctrlKey && event.altKey) {
                 isAdminMode = !isAdminMode;
                 if (isAdminMode) {
                     showCustomAlert("Debug Mód aktivován. Pro vypnutí stiskněte CTRL + ALT.");
+                    // Display the random number when debug mode is activated
                     feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
-                    feedbackDiv.style.color = "#FFFBDE";
+                    feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug mód
                 } else {
                     showCustomAlert("Debug mód deaktivován!");
-                    feedbackDiv.innerHTML = "";
+                    feedbackDiv.innerHTML = ""; // Clear feedback when debug mode is off
                 }
             }
 
+            // Enter key pressed in the input field to submit guess
             if (event.key === 'Enter' && document.activeElement === userGuessInput && !userGuessInput.disabled) {
                 handleGuess();
             }
         });
 
+        // Handle guess submission
         function handleGuess() {
             if (userGuessInput.disabled) return;
 
             const userGuess = parseInt(userGuessInput.value);
             attempts++;
 
+            // Validating the guess
             if (isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
                 feedbackDiv.textContent = "Prosím vložte platné číslo od 1 do 1000!";
-                feedbackDiv.style.color = "#F79B72";
+                feedbackDiv.style.color = "#F79B72"; // Oranžová pro nápovědu
             } else if (userGuess > randomNumber) {
                 feedbackDiv.textContent = "Číslo je moc velké! Zkuste to znovu.";
-                feedbackDiv.style.color = "orange";
+                feedbackDiv.style.color = "orange"; // Oranžová pro nápovědu
             } else if (userGuess < randomNumber) {
                 feedbackDiv.textContent = "Číslo je moc malé! Zkuste to znovu.";
-                feedbackDiv.style.color = "orange";
+                feedbackDiv.style.color = "orange"; // Oranžová pro nápovědu
             } else {
                 feedbackDiv.textContent = `Správně! Uhádl jsi číslo za ${attempts} pokusů.`;
-                feedbackDiv.style.color = "#DDDDDD";
+                feedbackDiv.style.color = "#DDDDDD"; // Bílá pro úspěch
                 guessButton.style.display = "none";
                 resetButton.style.display = "block";
                 userGuessInput.disabled = true;
+
+                // If admin mode is active, show debug information after the correct guess
+                if (isAdminMode) {
+                    feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo bylo uhodnuto!</p>`;
+                    feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug
+                }
             }
 
+            // Clear input if the guess is incorrect (while keeping debug mode active)
             if (userGuess !== randomNumber) {
+                if (isAdminMode) {
+                    // Show the secret number if admin mode is active
+                    feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
+                    feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug mód
+                }
                 userGuessInput.value = "";
             }
+
             userGuessInput.focus();
         }
 
+        // Button click event
         guessButton.addEventListener("click", function() {
             handleGuess();
         });
 
+        // Reset the game when the reset button is clicked
         resetButton.addEventListener("click", function() {
             randomNumber = Math.floor(Math.random() * 1000) + 1;
             attempts = 0;
@@ -162,12 +186,14 @@
             userGuessInput.disabled = false;
             userGuessInput.focus();
 
+            // Show secret number if debug mode is active after reset
             if (isAdminMode) {
                 feedbackDiv.innerHTML = `<strong class="noto-sans-100">Debug mód je aktivní!</strong><br><p class="noto-sans-100">Tajné číslo je: ${randomNumber}</p>`;
-                feedbackDiv.style.color = "#FFFBDE";
+                feedbackDiv.style.color = "#FFFBDE"; // Bílé pro debug
             }
         });
 
+        // Custom alert function (replaces the default alert)
         function showCustomAlert(message) {
             const existingAlert = document.getElementById('custom-alert-modal');
             if (existingAlert) existingAlert.remove();
