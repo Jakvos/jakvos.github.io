@@ -117,7 +117,7 @@
             height: 100vh;
             background-color: rgba(0, 0, 0, 0.9); /* Tmavší pozadí pro lepší kontrast */
             color: #FFFBDE;
-            overflow-y: auto;
+            overflow-y: auto; /* Povolí posuvník pro obsah tabulky */
             padding: 20px;
             box-sizing: border-box;
             z-index: 1000;
@@ -210,6 +210,27 @@
                 opacity: 1;
             }
         }
+
+        /* Styl pro tlačítko zavření tabulky */
+        #close-words-list-btn {
+            background-color: #f44336; /* Červená barva */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            width: auto; /* Důležité pro tlačítko, aby se neprotáhlo na 100% */
+            display: block; /* Zajistí, že bude na vlastním řádku */
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        #close-words-list-btn:hover {
+            background-color: #e53935;
+        }
     </style>
 </head>
 <body>
@@ -236,7 +257,7 @@
             { english: "accomplish", czech: "dokončit", synonyms: ["splnit", "uskutečnit", "dosáhnout", "provést"] },
             { english: "accuse", czech: "obvinit", synonyms: ["vinit", "obžalovat", "nařknout", "podezřívat"] },
             { english: "adventure", czech: "dobrodružství", synonyms: ["výprava", "pohádka", "expedice", "příběh"] },
-            { english: "bizarre", czech: "podivný", synonyms: ["zvláštní", "neobvyklý", "divný", "nechápavý"] },
+            { english: "bizarre", czech: "podivný", synonyms: ["zvláštní", "neobvyklý", "divný", "nechápavý","bizarní"] },
             { english: "calm", czech: "klidný", synonyms: ["pokojný", "poklidný", "mírný", "uvolněný"] },
             { english: "confuse", czech: "zmást", synonyms: ["popletený", "mít zmatek", "zavést", "splést"] },
             { english: "defend", czech: "bránit", synonyms: ["chránit", "obhajovat", "zastávat", "ochraňovat"] },
@@ -272,7 +293,7 @@
             { english: "valuable", czech: "cenný", synonyms: ["drahý", "skvostný", "významný", "neocenitelný"] },
             { english: "virtual", czech: "virtuální", synonyms: ["digitální", "nefyzický", "internetový", "neexistující"] },
             { english: "vulnerable", czech: "zranitelný", synonyms: ["citlivý", "ohrožený", "nechráněný", "riskantní"] },
-            { english: "worthy", czech: "hodný", synonyms: ["zasloužilý", "vhodný", "vznešený", "platný"] },
+            { english: "worthy", czech: "důstojný", synonyms: ["zasloužilý", "vhodný", "vznešený", "platný","hodný"] },
             { english: "Achieve", czech: "dosáhnout", synonyms: ["splnit", "uskutečnit", "provést", "realizovat"] },
             { english: "Adapt", czech: "adaptovat", synonyms: ["přizpůsobit", "modifikovat", "měnit", "přizpůsobit se"] },
             { english: "Category", czech: "kategorie", synonyms: ["typ", "druh", "třída", "skupina"] },
@@ -326,7 +347,12 @@
             wordCounter.textContent = `Slovo ${currentWordIndex + 1} z ${totalWords}`;
             userGuessInput.value = '';
             feedbackDiv.textContent = '';
-            userGuessInput.focus(); // Zaměřit input pole po zobrazení nového slova
+            userGuessInput.disabled = false; // Povolí input
+            submitButton.disabled = false; // Povolí tlačítko
+            // Malá prodleva pro focus, aby se zajistilo spolehlivé zaměření pole
+            setTimeout(() => {
+                userGuessInput.focus();
+            }, 50); 
         }
 
         // Funkce pro kontrolu správnosti odpovědi (včetně synonym)
@@ -335,11 +361,17 @@
 
             const userAnswer = userGuessInput.value.trim().toLowerCase();
 
+            // Okamžitě zakáže input a tlačítko, aby se zabránilo vícenásobnému odeslání
+            userGuessInput.disabled = true;
+            submitButton.disabled = true;
+
             // Kontrola, zda je vstupní pole prázdné
             if (userAnswer === '') {
                 feedbackDiv.textContent = "Prosím, zadej alespoň jedno písmeno!";
                 feedbackDiv.style.color = "#FFFBDE"; // Změna barvy pro upozornění
                 userGuessInput.focus();
+                userGuessInput.disabled = false; // Znovu povolí input, pokud je prázdný
+                submitButton.disabled = false; // Znovu povolí tlačítko, pokud je prázdný
                 return; // Zastaví další provádění funkce
             }
 
@@ -387,6 +419,7 @@
             resetButton.style.display = "block";
             showWordsButton.style.display = "block";
             userGuessInput.disabled = true; // Zakázat input po skončení hry
+            submitButton.disabled = true; // Zakázat tlačítko po skončení hry
             englishWord.textContent = "Hra skončila!"; // Změňte zobrazený text
             wordCounter.textContent = ""; // Skryjte počítadlo slov
         }
@@ -404,9 +437,16 @@
             });
             htmlContent += "</tbody></table>";
             htmlContent += "<p class='noto-sans-100' style='margin-top: 20px;'>Stiskni ESC pro zavření tabulky.</p>";
+            // Přidání tlačítka pro zavření tabulky pro mobilní zařízení
+            htmlContent += `<button id="close-words-list-btn" class="noto-sans-100">Zavřít tabulku</button>`;
+
             wordsListContentDiv.innerHTML = htmlContent;
             wordsListDiv.style.display = "block"; // Zobrazit seznam
             wordsListContentDiv.classList.add('slide-down'); // Spustit animaci slideDown na obsahu
+            wordsListDiv.scrollTop = 0; // Automaticky posune tabulku na začátek
+
+            // Přidání posluchače události na nové tlačítko
+            document.getElementById('close-words-list-btn').addEventListener('click', hideWordsList);
         }
 
         // Funkce pro skrytí seznamu slov
@@ -429,6 +469,7 @@
             showWordsButton.style.display = "none";
             hideWordsList(); // Skrýt seznam slovíček
             userGuessInput.disabled = false; // Povolit input
+            submitButton.disabled = false; // Povolit tlačítko
             displayWord();
         });
 
